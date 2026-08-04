@@ -15,7 +15,7 @@ const scripts = basicInfo.website ? basicInfo.website.script : ''
     </p>
   </NuxtLayout>
   <NuxtLayout v-else name="default">
-    <div class="fixed top-0 z-50 w-full flex items-center justify-center bg-white">
+    <div class="fixed top-0 z-50 w-full flex items-center justify-center bg-white border-b border-gray-100 shadow-sm">
       <div class="w-full bg-white px-4"
         :class="{ 'max-w-screen-xl': themeId == '1', 'max-w-screen-lg': themeId == '2' }">
         <div class="flex items-center h-16">
@@ -29,8 +29,22 @@ const scripts = basicInfo.website ? basicInfo.website.script : ''
               {{ nameI18n(locale, basicInfo) }}
             </NuxtLink>
           </div>
+
           <div class="flex-grow" />
-          <div class="flex items-center space-x-0.5">
+
+          <div class="flex items-center space-x-2">
+            <!-- Sentinel Manga Database Direct Button -->
+            <NuxtLink 
+              :to="localePath('/go')" 
+              class="btn btn-sm text-white font-medium rounded-lg flex items-center gap-1.5 shadow-sm hover:opacity-90 transition-all"
+              style="background-color: #fb7299; border: none; padding: 0 12px; height: 34px; line-height: 34px;"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              <span>哨兵漫画数据库</span>
+            </NuxtLink>
+
             <NuxtLink :to="localePath('/order/search')" class="btn btn-sm btn-outline rounded-md">
               {{ $t('header_search_order') }}
             </NuxtLink>
@@ -63,14 +77,9 @@ const scripts = basicInfo.website ? basicInfo.website.script : ''
 <style>
 .merchant-name {
   display: -webkit-box;
-  /* 将元素作为弹性伸缩盒子展示 */
   -webkit-line-clamp: 1;
-  /* 限制文本行数为 1 行 */
   -webkit-box-orient: vertical;
-  /* 设置伸缩盒子为垂直方向 */
   overflow: hidden;
-  /* 隐藏溢出文本 */
   text-overflow: ellipsis;
-  /* 使用省略号截断溢出文本 */
 }
 </style>
