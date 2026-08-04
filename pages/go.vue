@@ -14,7 +14,7 @@
       <!-- Status Message -->
       <div v-if="isChecking" class="py-6 text-gray-500 text-sm flex flex-col items-center gap-2">
         <div class="w-6 h-6 border-2 border-[#fb7299] border-t-transparent rounded-full animate-spin"></div>
-        <span>正在对接最新高频节点...</span>
+        <span>正在接入最新哨兵高频节点...</span>
       </div>
 
       <div v-else-if="isOnline" class="py-6 text-emerald-600 text-sm font-medium">
@@ -75,9 +75,17 @@ const checkAndRedirect = async () => {
     if (route.query.node) {
       targetUrl.value = String(route.query.node)
     } else {
-      const res = await $fetch('/api/sentinel-node')
-      if (res && res.url) {
-        targetUrl.value = res.url
+      // Try fetching static json or api
+      try {
+        const res = await $fetch('/sentinel-node.json?' + Date.now())
+        if (res && res.url) {
+          targetUrl.value = res.url
+        }
+      } catch(e) {
+        const res = await $fetch('/api/sentinel-node')
+        if (res && res.url) {
+          targetUrl.value = res.url
+        }
       }
     }
 
@@ -92,10 +100,10 @@ const checkAndRedirect = async () => {
         isOnline.value = true
         setTimeout(() => {
           window.location.href = targetUrl.value
-        }, 500)
+        }, 400)
         return
       } catch(e) {
-        // If fetch fails or aborts
+        // Ping failed
       }
     }
   } catch(err) {
