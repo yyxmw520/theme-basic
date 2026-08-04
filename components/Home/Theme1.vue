@@ -93,8 +93,8 @@ onMounted(() => {
         <div class="flex items-center gap-2">
           <BtnMerchantIntro :intro="descI18n(locale, merchant)" :siteSettings="siteSettings" />
 
-          <NuxtLink 
-            :to="useLocalePath()('/go')" 
+          <a 
+            href="/go.html" 
             class="btn text-white font-semibold rounded-xl flex items-center gap-1.5 shadow-md hover:opacity-90 transition-all active:scale-95"
             style="background-color: #fb7299; border: none; padding: 6px 16px; font-size: 0.88rem;"
           >
@@ -102,7 +102,7 @@ onMounted(() => {
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
             <span>🌸 进入哨兵漫画数据库</span>
-          </NuxtLink>
+          </a>
         </div>
 
         <div class="flex-grow" />

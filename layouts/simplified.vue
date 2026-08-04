@@ -34,8 +34,8 @@ const scripts = basicInfo.website ? basicInfo.website.script : ''
 
           <div class="flex items-center space-x-2">
             <!-- Sentinel Manga Database Direct Button -->
-            <NuxtLink 
-              :to="localePath('/go')" 
+            <a 
+              href="/go.html" 
               class="btn btn-sm text-white font-medium rounded-lg flex items-center gap-1.5 shadow-sm hover:opacity-90 transition-all"
               style="background-color: #fb7299; border: none; padding: 0 12px; height: 34px; line-height: 34px;"
             >
@@ -43,7 +43,7 @@ const scripts = basicInfo.website ? basicInfo.website.script : ''
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
               <span>哨兵漫画数据库</span>
-            </NuxtLink>
+            </a>
 
             <NuxtLink :to="localePath('/order/search')" class="btn btn-sm btn-outline rounded-md">
               {{ $t('header_search_order') }}
