@@ -90,8 +90,19 @@ onMounted(() => {
     <div v-if="isNotEmptyObj(merchant)" class="w-full max-w-screen-xl space-y-4 px-4 my-2">
 
       <div class="mt-4 flex items-center">
-        <div>
+        <div class="flex items-center gap-2">
           <BtnMerchantIntro :intro="descI18n(locale, merchant)" :siteSettings="siteSettings" />
+
+          <NuxtLink 
+            :to="useLocalePath()('/go')" 
+            class="btn text-white font-semibold rounded-xl flex items-center gap-1.5 shadow-md hover:opacity-90 transition-all active:scale-95"
+            style="background-color: #fb7299; border: none; padding: 6px 16px; font-size: 0.88rem;"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <span>🌸 进入哨兵漫画数据库</span>
+          </NuxtLink>
         </div>
 
         <div class="flex-grow" />
