@@ -6,6 +6,15 @@ const localePath = useLocalePath()
 const basicInfo = await stateMerchant.basic(true)
 const themeId = basicInfo.website ? basicInfo.website.theme : '1'
 const scripts = basicInfo.website ? basicInfo.website.script : ''
+
+onMounted(() => {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('gate') === 'passed') {
+    sessionStorage.setItem('gate_passed', '1');
+  } else if (!sessionStorage.getItem('gate_passed')) {
+    window.location.href = '/gate.html';
+  }
+})
 </script>
 
 <template>
