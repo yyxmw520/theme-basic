@@ -1,5 +1,8 @@
 export const isNotEmptyObj = (obj: any) => {
-  return Object.keys(obj).length !== 0;
+  if (!obj) return false;
+  const target = (typeof obj === 'object' && obj !== null && 'value' in obj) ? obj.value : obj;
+  if (!target || typeof target !== 'object') return false;
+  return Object.keys(target).length !== 0;
 }
 
 export const displayStock = (stock: number, hidden: boolean) => {
