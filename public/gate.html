@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>梦幻发卡网 · 智能多节点高速网关</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background-color: #f4f5f9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .btn-pink { background-color: #fb7299; color: #ffffff; }
+    .btn-pink:hover { background-color: #f06288; }
+    .node-card { transition: all 0.2s ease-in-out; }
+    .node-card:hover { transform: translateY(-2px); }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+  <div class="max-w-lg w-full bg-white rounded-2xl p-6 shadow-xl border border-pink-100">
+    <!-- Header -->
+    <div class="text-center mb-6">
+      <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-pink-50 flex items-center justify-center text-[#fb7299]">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      </div>
+      <h1 class="text-xl font-bold text-gray-900">梦幻发卡网 · 智能高速网关</h1>
+      <p class="text-xs text-gray-500 mt-1">自动检测您当前网络（移动/电信/联通/海外）最佳直连线路</p>
+    </div>
+
+    <!-- Status Banner -->
+    <div id="status-banner" class="mb-6 p-4 rounded-xl bg-pink-50 border border-pink-100 flex items-center gap-3">
+      <div class="w-5 h-5 border-2 border-[#fb7299] border-t-transparent rounded-full animate-spin flex-shrink-0"></div>
+      <div class="text-xs text-gray-700 font-medium" id="status-text">正在并行测速匹配国内直连低延迟节点...</div>
+    </div>
+
+    <!-- Nodes List -->
+    <div class="space-y-3 mb-6" id="nodes-container">
+      <!-- Node 1: Vercel CDN -->
+      <div id="node-vercel" class="node-card p-3.5 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-3 h-3 rounded-full bg-gray-300" id="dot-vercel"></div>
+          <div>
+            <div class="text-sm font-bold text-gray-800 flex items-center gap-2">
+              <span>节点 1：Vercel 国际主节点</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-200 text-gray-600 font-normal">默认路线</span>
+            </div>
+            <div class="text-xs text-gray-400 mt-0.5" id="ping-vercel">测速中...</div>
+          </div>
+        </div>
+        <button onclick="directGo('vercel')" id="btn-vercel" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed" disabled>
+          手动接入
+        </button>
+      </div>
+
+      <!-- Node 2: Cloudflare Fast Edge -->
+      <div id="node-cf" class="node-card p-3.5 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-3 h-3 rounded-full bg-gray-300" id="dot-cf"></div>
+          <div>
+            <div class="text-sm font-bold text-gray-800 flex items-center gap-2">
+              <span>节点 2：Cloudflare 亚州加速节点</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 font-normal">国内推荐</span>
+            </div>
+            <div class="text-xs text-gray-400 mt-0.5" id="ping-cf">测速中...</div>
+          </div>
+        </div>
+        <button onclick="directGo('cf')" id="btn-cf" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed" disabled>
+          手动接入
+        </button>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="space-y-2.5">
+      <button 
+        onclick="runSpeedTest()" 
+        class="w-full py-2.5 px-4 btn-pink font-medium rounded-xl text-sm transition-all shadow-md active:scale-95 flex items-center justify-center gap-2"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        <span>重新测试线路网速</span>
+      </button>
+
+      <a 
+        href="/zh-cn" 
+        class="block w-full py-2.5 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 text-center font-medium rounded-xl text-sm transition-all"
+      >
+        🛒 直接尝试进入默认商城
+      </a>
+    </div>
+
+    <div class="mt-6 pt-4 border-t border-gray-100 text-center text-xs text-gray-400">
+      Dream Store Gateway · 多网络自适应路由引擎
+    </div>
+  </div>
+
+  <script>
+    const OBJECT_ID = 'ff8081819f7e10ae019fcf6497ae7500';
+    let nodeUrls = {
+      vercel: 'https://theme-basic-delta-one.vercel.app/zh-cn',
+      cf: ''
+    };
+
+    async function fetchDynamicNode() {
+      try {
+        const res = await fetch(`https://api.restful-api.dev/objects/${OBJECT_ID}?t=${Date.now()}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.data && data.data.url) {
+            nodeUrls.cf = data.data.url;
+          }
+        }
+      } catch(e) {}
+    }
+
+    async function testNode(key, url) {
+      const start = Date.now();
+      const dot = document.getElementById(`dot-${key}`);
+      const pingText = document.getElementById(`ping-${key}`);
+      const btn = document.getElementById(`btn-${key}`);
+
+      if (!url) {
+        dot.className = 'w-3 h-3 rounded-full bg-amber-400';
+        pingText.innerText = '离线 / 未开启';
+        btn.disabled = true;
+        return { key, latency: 9999, ok: false };
+      }
+
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000);
+        await fetch(url, { mode: 'no-cors', signal: controller.signal });
+        clearTimeout(timeoutId);
+
+        const latency = Date.now() - start;
+        dot.className = 'w-3 h-3 rounded-full bg-emerald-500';
+        pingText.innerText = `延迟: ${latency} ms (完美直连)`;
+        btn.disabled = false;
+        btn.className = 'px-3 py-1.5 text-xs font-semibold rounded-lg bg-pink-50 text-[#fb7299] hover:bg-pink-100 active:scale-95 transition-all';
+        return { key, latency, ok: true, url };
+      } catch(e) {
+        dot.className = 'w-3 h-3 rounded-full bg-red-400';
+        pingText.innerText = '连接超时 (可能遭运营商阻断)';
+        btn.disabled = false;
+        btn.className = 'px-3 py-1.5 text-xs font-semibold rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all';
+        return { key, latency: 9999, ok: false, url };
+      }
+    }
+
+    async function runSpeedTest() {
+      const banner = document.getElementById('status-text');
+      banner.innerText = '正在测速匹配最佳节点...';
+
+      await fetchDynamicNode();
+
+      const results = await Promise.all([
+        testNode('vercel', nodeUrls.vercel),
+        testNode('cf', nodeUrls.cf)
+      ]);
+
+      const available = results.filter(r => r.ok).sort((a, b) => a.latency - b.latency);
+
+      if (available.length > 0) {
+        const best = available[0];
+        banner.innerText = `已自动为您锁定最快节点 (${best.key === 'vercel' ? 'Vercel 节点' : 'Cloudflare 亚洲加速节点'})，0.5秒后自动接入...`;
+        setTimeout(() => {
+          window.location.href = best.url;
+        }, 500);
+      } else if (nodeUrls.cf) {
+        banner.innerText = '默认 Vercel 节点受到运营商干扰，为您自动切换至备用加速通道接入...';
+        setTimeout(() => {
+          window.location.href = nodeUrls.cf;
+        }, 800);
+      } else {
+        banner.innerText = '暂未检测到可用的高速全平无缝节点，您可尝试刷新或开启代理。';
+      }
+    }
+
+    function directGo(key) {
+      if (nodeUrls[key]) {
+        window.location.href = nodeUrls[key];
+      }
+    }
+
+    runSpeedTest();
+  </script>
+</body>
+</html>
