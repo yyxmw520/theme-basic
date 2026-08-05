@@ -70,6 +70,8 @@
   </div>
 
   <script>
+    const OBJECT_ID = 'ff8081819f7e10ae019fcf6497ae7500';
+
     async function checkNode() {
       const checking = document.getElementById('checking-state');
       const success = document.getElementById('success-state');
@@ -87,10 +89,12 @@
         targetUrl = params.get('node');
       } else {
         try {
-          const res = await fetch('/sentinel-node.json?' + Date.now());
+          const res = await fetch(`https://api.restful-api.dev/objects/${OBJECT_ID}?t=${Date.now()}`);
           if (res.ok) {
             const data = await res.json();
-            targetUrl = data.url;
+            if (data && data.data && data.data.url) {
+              targetUrl = data.data.url;
+            }
           }
         } catch(e) {}
       }
@@ -107,7 +111,7 @@
 
           setTimeout(() => {
             window.location.href = targetUrl;
-          }, 400);
+          }, 300);
           return;
         } catch(e) {}
       }
