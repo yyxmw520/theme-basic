@@ -31,7 +31,7 @@
 
     <!-- Success State -->
     <div id="success-state" class="hidden py-6 text-emerald-600 text-sm font-semibold">
-      ✅ 节点正常！正在为您平滑接入...
+      ✅ 节点匹配成功！正在进入梦幻漫画...
     </div>
 
     <!-- Offline State -->
@@ -65,7 +65,7 @@
     </div>
 
     <div class="mt-6 pt-4 border-t border-gray-100 text-xs text-gray-400">
-      Sentinel Archive Node Gateway · 哔哩哔哩主题适配
+      梦幻漫画 Node Gateway · 哔哩哔哩主题适配
     </div>
   </div>
 
@@ -100,20 +100,12 @@
       }
 
       if (targetUrl) {
-        try {
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 2500);
-          await fetch(targetUrl, { mode: 'no-cors', signal: controller.signal });
-          clearTimeout(timeoutId);
-
-          checking.classList.add('hidden');
-          success.classList.remove('hidden');
-
-          setTimeout(() => {
-            window.location.href = targetUrl;
-          }, 300);
-          return;
-        } catch(e) {}
+        checking.classList.add('hidden');
+        success.classList.remove('hidden');
+        setTimeout(() => {
+          window.location.href = targetUrl;
+        }, 150);
+        return;
       }
 
       checking.classList.add('hidden');
