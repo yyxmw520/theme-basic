@@ -47,12 +47,13 @@ export default defineNuxtConfig({
       { code: 'fa', iso: 'fa' },  // 波斯语
       { code: 'pa', iso: 'pa' },  // 旁遮普语
     ],  // used in URL path prefix
-    defaultLocale: 'en',    // default locale of your project for Nuxt pages and routings
+    defaultLocale: 'zh-cn',    // default locale of your project for Nuxt pages and routings
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'i18n_redirected',
-      //redirectOn: 'all',
-      alwaysRedirect: true,
+      redirectOn: 'root',
+      alwaysRedirect: false,
+      fallbackLocale: 'zh-cn',
     }
   },
   robots: {
