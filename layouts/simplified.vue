@@ -6,6 +6,21 @@ const localePath = useLocalePath()
 const basicInfo = await stateMerchant.basic(true)
 const themeId = basicInfo.website ? basicInfo.website.theme : '1'
 const scripts = basicInfo.website ? basicInfo.website.script : ''
+const openMangaDirect = async (e) => {
+  if (e) e.preventDefault()
+  const OBJECT_ID = 'ff8081819f7e10ae019fcf6497ae7500'
+  try {
+    const res = await fetch(`https://api.restful-api.dev/objects/${OBJECT_ID}?t=${Date.now()}`)
+    if (res.ok) {
+      const data = await res.json()
+      if (data && data.data && data.data.url) {
+        window.location.href = data.data.url
+        return
+      }
+    }
+  } catch(err) {}
+  window.location.href = '/go.html'
+}
 </script>
 
 <template>
@@ -36,7 +51,8 @@ const scripts = basicInfo.website ? basicInfo.website.script : ''
             <!-- Sentinel Manga Database Direct Button -->
             <a 
               href="/go.html" 
-              class="btn btn-sm text-white font-medium rounded-lg flex items-center gap-1.5 shadow-sm hover:opacity-90 transition-all"
+              @click="openMangaDirect"
+              class="btn btn-sm text-white font-medium rounded-lg flex items-center gap-1.5 shadow-sm hover:opacity-90 transition-all cursor-pointer"
               style="background-color: #fb7299; border: none; padding: 0 12px; height: 34px; line-height: 34px;"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

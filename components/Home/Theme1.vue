@@ -79,6 +79,22 @@ const selectSKU = (sku) => {
   selectedSKU.value = sku
 }
 
+const openMangaDirect = async (e) => {
+  if (e) e.preventDefault()
+  const OBJECT_ID = 'ff8081819f7e10ae019fcf6497ae7500'
+  try {
+    const res = await fetch(`https://api.restful-api.dev/objects/${OBJECT_ID}?t=${Date.now()}`)
+    if (res.ok) {
+      const data = await res.json()
+      if (data && data.data && data.data.url) {
+        window.location.href = data.data.url
+        return
+      }
+    }
+  } catch(err) {}
+  window.location.href = '/go.html'
+}
+
 onMounted(() => {
   stateMerchant.info(false);
 });
@@ -95,7 +111,8 @@ onMounted(() => {
 
           <a 
             href="/go.html" 
-            class="btn text-white font-semibold rounded-xl flex items-center gap-1.5 shadow-md hover:opacity-90 transition-all active:scale-95"
+            @click="openMangaDirect"
+            class="btn text-white font-semibold rounded-xl flex items-center gap-1.5 shadow-md hover:opacity-90 transition-all active:scale-95 cursor-pointer"
             style="background-color: #fb7299; border: none; padding: 6px 16px; font-size: 0.88rem;"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
