@@ -22,7 +22,8 @@ export default defineNuxtConfig({
     '@nuxt/image',
   ],
   css: ['~/assets/css/main.css'],
-  nitro: { // 性能优化
+  nitro: { // 性能优化与 Cloudflare Pages 部署预设
+    preset: 'cloudflare-pages',
     compressPublicAssets: true,
   },
   i18n: {
