@@ -105,14 +105,14 @@ onMounted(() => {
   <section class="flex justify-center">
     <div v-if="isNotEmptyObj(merchant)" class="w-full max-w-screen-xl space-y-4 px-4 my-2">
 
-      <div class="mt-4 flex items-center">
-        <div class="flex items-center gap-2">
+      <div class="mt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap justify-between sm:justify-start">
           <BtnMerchantIntro :intro="descI18n(locale, merchant)" :siteSettings="siteSettings" />
 
           <a 
             href="/go.html" 
             @click="openMangaDirect"
-            class="btn text-white font-semibold rounded-xl flex items-center gap-1.5 shadow-md hover:opacity-90 transition-all active:scale-95 cursor-pointer"
+            class="btn text-white font-semibold rounded-xl flex items-center gap-1.5 shadow-md hover:opacity-90 transition-all active:scale-95 cursor-pointer whitespace-nowrap"
             style="background-color: #fb7299; border: none; padding: 6px 16px; font-size: 0.88rem;"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -122,10 +122,8 @@ onMounted(() => {
           </a>
         </div>
 
-        <div class="flex-grow" />
-
-        <div class="flex items-center gap-x-2">
-          <div v-if="!isNotEmptyObj(selectedSKU)" class="max-w-md mx-auto">
+        <div class="flex items-center gap-x-2 w-full sm:w-auto">
+          <div v-if="!isNotEmptyObj(selectedSKU)" class="flex-1 sm:w-64">
             <div class="relative">
               <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                 <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
@@ -135,11 +133,11 @@ onMounted(() => {
                 </svg>
               </div>
               <input type="search" v-model="keyword"
-                class="block w-full p-1 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-0 focus:border-gray-800"
+                class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-0 focus:border-gray-800"
                 :placeholder="$t('Search')" />
             </div>
           </div>
-          <BtnMerchantContact :contacts="merchant.contacts" :vertical="true" />
+          <BtnMerchantContact :contacts="merchant.contacts" :vertical="true" class="flex-shrink-0" />
         </div>
       </div>
 
