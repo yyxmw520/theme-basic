@@ -81,18 +81,14 @@ const selectSKU = (sku) => {
 
 const openMangaDirect = async (e) => {
   if (e) e.preventDefault()
-  const OBJECT_ID = 'ff8081819f7e10ae019fcf6497ae7500'
   try {
-    const res = await fetch(`https://api.restful-api.dev/objects/${OBJECT_ID}?t=${Date.now()}`)
-    if (res.ok) {
-      const data = await res.json()
-      if (data && data.data && data.data.url) {
-        window.location.href = data.data.url
-        return
-      }
+    const res = await fetch('https://jsonblob.com/api/jsonBlob/019fe139-7dca-7555-9ee0-3fce11b7810f').then(r => r.json())
+    if (res && (res.pagesUrl || res.url)) {
+      window.location.href = res.pagesUrl || res.url
+      return
     }
   } catch(err) {}
-  window.location.href = '/go.html'
+  window.location.href = 'https://520menghuan.pages.dev'
 }
 
 onMounted(() => {
