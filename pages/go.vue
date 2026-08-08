@@ -75,39 +75,30 @@ const checkAndRedirect = async () => {
     if (route.query.node) {
       targetUrl.value = String(route.query.node)
     } else {
-      // Try fetching static json or api
       try {
-        const res = await $fetch('/sentinel-node.json?' + Date.now())
-        if (res && res.url) {
+        const res = await fetch('https://jsonblob.com/api/jsonBlob/019fe139-7dca-7555-9ee0-3fce11b7810f').then(r => r.json())
+        if (res && res.pagesUrl) {
+          targetUrl.value = res.pagesUrl
+        } else if (res && res.url) {
           targetUrl.value = res.url
         }
       } catch(e) {
-        const res = await $fetch('/api/sentinel-node')
-        if (res && res.url) {
-          targetUrl.value = res.url
-        }
+        targetUrl.value = 'https://520menghuan.pages.dev'
       }
     }
 
-    if (targetUrl.value) {
-      // Test ping to target node
-      try {
-        const controller = new AbortController()
-        const id = setTimeout(() => controller.abort(), 2000)
-        await fetch(targetUrl.value, { mode: 'no-cors', signal: controller.signal })
-        clearTimeout(id)
-        
-        isOnline.value = true
-        setTimeout(() => {
-          window.location.href = targetUrl.value
-        }, 400)
-        return
-      } catch(e) {
-        // Ping failed
-      }
+    if (!targetUrl.value) {
+      targetUrl.value = 'https://520menghuan.pages.dev'
     }
+
+    isOnline.value = true
+    setTimeout(() => {
+      window.location.href = targetUrl.value
+    }, 300)
+    return
   } catch(err) {
     console.error('Error checking node status:', err)
+    window.location.href = 'https://520menghuan.pages.dev'
   } finally {
     isChecking.value = false
   }
